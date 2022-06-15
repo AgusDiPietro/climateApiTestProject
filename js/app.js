@@ -3,23 +3,24 @@ const resultado = document.querySelector('#resultado');
 const formulario = document.querySelector('#formulario');
 
 window.addEventListener('load', () => {
-    formulario.addEventListener('submit', buscarClima());
+    formulario.addEventListener('submit', buscarClima);
 }) 
 
 function buscarClima(e){
-    e.preventDefault();
+     e.preventDefault();
 
-    const ciudad = document.querySelector('#ciudad').value;
-    const pais = document.querySelector('#pais').value;
-   //Validar formulario
-   if(ciudad==='' || pais===''){
-    mostrarError('Ambos campos son obligatorios');
+     const ciudad = document.querySelector('#ciudad').value;
+     const pais = document.querySelector('#pais').value;
+    //Validar formulario
+     if(ciudad==='' || pais===''){
+     mostrarError('Ambos campos son obligatorios');
     
-    return
-   } 
+     return
+     } 
 
-    //Consultar la API
-}
+     //Consultar la API
+         consultarApi(ciudad, pais);
+    }
 
 function mostrarError(mensaje ){
     
@@ -29,7 +30,7 @@ function mostrarError(mensaje ){
 
         //Alerta
      const alerta = document.createElement('div');
-     alert.classList.add('bg-red-100','border-red-400','text-red-700','px-4','py-3','rounded','max-w-md','mx-auto','mt-6','text-center');
+        alert.classList.add('bg-red-100','border-red-400','text-red-700','px-4','py-3','rounded','max-w-md','mx-auto','mt-6','text-center');
 
      alert.innerHTML =`
        <strong class="font-bold">Error!</strong>
@@ -37,8 +38,28 @@ function mostrarError(mensaje ){
      `;
 
      container.appendChild(alerta);      
+   
+     setTimeout(() => {
+        alerta.remove()
+     }, 1500);
+
     }
 }
 
+function consultarApi(ciudad,pais){
+
+    const appId = 'f1dacfbeef47cda4459b72f1b95468c6';
+
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
+
+    fetch(url)
+     .then( respuesta => respuesta.json())
+     .then (datos => {
+        if(datos.cod==='404'){
+            mostrarError('Ciudad no encontrada')
+        }
+        });
+
+}
 
     
